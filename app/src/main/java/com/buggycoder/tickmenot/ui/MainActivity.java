@@ -12,7 +12,9 @@ import android.widget.Toast;
 
 import com.buggycoder.tickmenot.R;
 import com.buggycoder.tickmenot.event.NotifAccessChangedEvent;
+import com.buggycoder.tickmenot.event.NotifLoadRequestEvent;
 import com.buggycoder.tickmenot.event.NotifPerstEvent;
+import com.buggycoder.tickmenot.lib.BusProvider;
 import com.buggycoder.tickmenot.model.WhatsappNotif;
 import com.squareup.otto.Subscribe;
 
@@ -68,6 +70,7 @@ public class MainActivity extends BaseActivity {
 
     private void updateUI() {
         updateNotifAccessView(hasNotifAccessPermission());
+        BusProvider.getBus().post(new NotifLoadRequestEvent());
     }
 
     private boolean hasNotifAccessPermission() {

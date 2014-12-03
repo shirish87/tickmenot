@@ -11,6 +11,7 @@ import android.text.TextUtils;
 
 import com.buggycoder.tickmenot.R;
 import com.buggycoder.tickmenot.event.NotifAccessChangedEvent;
+import com.buggycoder.tickmenot.event.NotifLoadRequestEvent;
 import com.buggycoder.tickmenot.event.NotifPerstEvent;
 import com.buggycoder.tickmenot.lib.BusProvider;
 import com.buggycoder.tickmenot.lib.Tuple;
@@ -19,6 +20,7 @@ import com.buggycoder.tickmenot.notif.UnsupportedNotifException;
 import com.buggycoder.tickmenot.notif.WhatsappNotifParser;
 import com.buggycoder.tickmenot.ui.MainActivity;
 import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
 
 import java.util.List;
 
@@ -149,5 +151,10 @@ public class NotifService extends NotificationListenerService {
                 getSystemService(NOTIFICATION_SERVICE);
         notificationManager.cancelAll();
         notificationManager.notify(SELF_NOTIF_ID, notificationBuilder.build());
+    }
+
+    @Subscribe
+    public void onNotifLoadRequestEvent(NotifLoadRequestEvent event) {
+        updateNotifs();
     }
 }
