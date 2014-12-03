@@ -1,11 +1,15 @@
 package com.buggycoder.tickmenot.service;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.IBinder;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 import android.text.TextUtils;
 
+import com.buggycoder.tickmenot.R;
 import com.buggycoder.tickmenot.event.NotifAccessChangedEvent;
 import com.buggycoder.tickmenot.event.NotifPerstEvent;
 import com.buggycoder.tickmenot.lib.BusProvider;
@@ -13,6 +17,7 @@ import com.buggycoder.tickmenot.lib.Tuple;
 import com.buggycoder.tickmenot.model.WhatsappNotif;
 import com.buggycoder.tickmenot.notif.UnsupportedNotifException;
 import com.buggycoder.tickmenot.notif.WhatsappNotifParser;
+import com.buggycoder.tickmenot.ui.MainActivity;
 import com.squareup.otto.Bus;
 
 import java.util.List;
@@ -20,6 +25,7 @@ import java.util.List;
 import timber.log.Timber;
 
 public class NotifService extends NotificationListenerService {
+    private static final int SELF_NOTIF_ID = 100;
 
     private Bus mBus;
     private WhatsappNotifParser mNotifParser;
@@ -109,6 +115,10 @@ public class NotifService extends NotificationListenerService {
                 }
 
                 BusProvider.getBus().post(new NotifPerstEvent(notifs, true));
+
+                if (!summaryText.isEmpty()) {
+                    notifyUser(summaryText);
+                }
             } else {
                 Timber.w("No new notifs");
             }
@@ -122,5 +132,22 @@ public class NotifService extends NotificationListenerService {
         }
 
         return (long) -1;
+    }
+
+    private void notifyUser(String summaryText) {
+        Intent viewIntent = new Intent(this, MainActivity.class);
+        PendingIntent viewPendingIntent = PendingIntent.getActivity(this, 0, viewIntent, 0);
+
+        Notification.Builder notificationBuilder = new Notification.Builder(this)
+                .setSmallIcon(R.drawable.ic_launcher)
+                .setAutoCancel(true)
+                .setContentTitle("Unread Whatsapp messages")
+                .setContentText(summaryText)
+                .setContentIntent(viewPendingIntent);
+
+        NotificationManager notificationManager = (NotificationManager)
+                getSystemService(NOTIFICATION_SERVICE);
+        notificationManager.cancelAll();
+        notificationManager.notify(SELF_NOTIF_ID, notificationBuilder.build());
     }
 }
