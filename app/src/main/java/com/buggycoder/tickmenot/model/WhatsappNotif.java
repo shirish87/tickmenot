@@ -7,8 +7,15 @@ import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Select;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Collections;
+import java.util.List;
+
 @Table(name = "notif", id = BaseColumns._ID)
 public class WhatsappNotif extends Model {
+
+    private static final DateFormat df = new SimpleDateFormat("EEE, d MMM, h:mm a");
 
     @Column(name = "event")
     public String event;
@@ -39,6 +46,10 @@ public class WhatsappNotif extends Model {
 
         // may come in handy for dup checks
         this.hashCode = hashCode();
+    }
+
+    public String getFormattedPostTime() {
+        return (postTime > 0) ? df.format(postTime) : "";
     }
 
     @Override
@@ -77,5 +88,16 @@ public class WhatsappNotif extends Model {
                 .executeSingle();
 
         return (lastNotif != null && lastNotif.equals(notif));
+    }
+
+    public static List<WhatsappNotif> list() {
+        List<WhatsappNotif> queryResult = new Select()
+                .from(WhatsappNotif.class)
+                .orderBy("_id DESC")
+                .limit(50)
+                .execute();
+
+        Collections.reverse(queryResult);
+        return queryResult;
     }
 }

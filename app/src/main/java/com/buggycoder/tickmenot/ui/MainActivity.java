@@ -1,5 +1,7 @@
 package com.buggycoder.tickmenot.ui;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.os.Bundle;
@@ -27,6 +29,8 @@ public class MainActivity extends BaseActivity {
 
     private String mPackageName;
 
+    private NotifListFragment mNotifListFragment;
+
     @InjectView(R.id.requestNotifAccess)
     Button mRequestNotifAccess;
 
@@ -42,6 +46,16 @@ public class MainActivity extends BaseActivity {
             }
         });
 
+        FragmentManager fm = getFragmentManager();
+        mNotifListFragment = (NotifListFragment) fm.findFragmentByTag(NotifListFragment.TAG);
+
+        if (savedInstanceState == null) {
+            FragmentTransaction transaction = fm.beginTransaction();
+            mNotifListFragment = new NotifListFragment();
+            transaction.replace(R.id.contentPane, mNotifListFragment, NotifListFragment.TAG);
+            transaction.commit();
+        }
+
         mPackageName = getPackageName();
     }
 
@@ -52,7 +66,7 @@ public class MainActivity extends BaseActivity {
         if (!hasNotifAccessPermission()) {
             requestNotifAccess();
         } else {
-            updateNotifAccessView(false);
+            updateNotifAccessView(true);
         }
     }
 
