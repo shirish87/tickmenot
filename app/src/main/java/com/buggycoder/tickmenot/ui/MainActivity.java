@@ -63,11 +63,11 @@ public class MainActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
 
-        if (!hasNotifAccessPermission()) {
-            requestNotifAccess();
-        } else {
-            updateNotifAccessView(true);
-        }
+        updateUI();
+    }
+
+    private void updateUI() {
+        updateNotifAccessView(hasNotifAccessPermission());
     }
 
     private boolean hasNotifAccessPermission() {
@@ -77,9 +77,14 @@ public class MainActivity extends BaseActivity {
     }
 
     private void requestNotifAccess() {
-        Toast.makeText(MainActivity.this, getString(R.string.request_notif_access),
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(MainActivity.this, getString(R.string.request_notif_access),
                         Toast.LENGTH_SHORT).show();
-        startActivity(new Intent(SETTINGS_NOTIF_LISTENER));
+                startActivity(new Intent(SETTINGS_NOTIF_LISTENER));
+            }
+        });
     }
 
     private void updateNotifAccessView(final boolean isAccessEnabled) {
@@ -98,6 +103,15 @@ public class MainActivity extends BaseActivity {
 
     @Subscribe
     public void onNotifPerstEvent(final NotifPerstEvent notifPerst) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (mNotifListFragment != null) {
+                    mNotifListFragment.updateNotifs(notifPerst.notifs);
+                }
+            }
+        });
+
         if (notifPerst.notifs.size() > 0) {
             WhatsappNotif notif = notifPerst.notifs.get(notifPerst.notifs.size() - 1);
             String status = notifPerst.isSuccess ? "Success" : "Error";
