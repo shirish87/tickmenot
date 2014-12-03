@@ -47,7 +47,7 @@ public class MainActivity extends BaseActivity {
         if (!hasNotifAccessPermission()) {
             requestNotifAccess();
         } else {
-            updateNotifAccessView(true);
+            updateNotifAccessView(false);
         }
     }
 

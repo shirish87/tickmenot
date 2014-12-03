@@ -30,6 +30,7 @@ public class NotifService extends NotificationListenerService {
         mBus.register(this);
 
         mNotifParser = new WhatsappNotifParser(getResources());
+        Timber.d("onCreate");
     }
 
     @Override
@@ -37,16 +38,19 @@ public class NotifService extends NotificationListenerService {
         super.onDestroy();
 
         mBus.unregister(this);
+        Timber.d("onDestroy");
     }
 
     @Override
     public IBinder onBind(Intent intent) {
+        Timber.d("onBind");
         mBus.post(new NotifAccessChangedEvent(true));
         return super.onBind(intent);
     }
 
     @Override
     public boolean onUnbind(Intent intent) {
+        Timber.d("onUnbind");
         mBus.post(new NotifAccessChangedEvent(false));
         return super.onUnbind(intent);
     }
@@ -61,6 +65,9 @@ public class NotifService extends NotificationListenerService {
         } catch (UnsupportedNotifException e) {
             Timber.e(e, "Parsing failed");
         }
+
+        WhatsappNotif test = new WhatsappNotif("event", "sender", "message", 1);
+        test.save();
     }
 
     @Override
