@@ -88,7 +88,7 @@ public class WhatsappNotif extends Model {
                 .orderBy("_id DESC")
                 .executeSingle();
 
-        return (lastNotif != null && lastNotif.equals(notif));
+        return (lastNotif != null && lastNotif.message.equals(notif.message));
     }
 
     public static List<WhatsappNotif> list() {
