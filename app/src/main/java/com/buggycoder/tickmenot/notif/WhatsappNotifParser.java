@@ -78,7 +78,7 @@ public class WhatsappNotifParser extends NotifParser<WhatsappNotif> {
 
 
     private Tuple<String, String> splitSenderMessage(String message) {
-        Pattern p = Pattern.compile("^(.*?)" + mSenderSeparator + "\\s*(.*)");
+        Pattern p = Pattern.compile("^(.*?)" + mSenderSeparator + "\\s*(.*)", Pattern.DOTALL);
         Matcher m = p.matcher(message);
 
         if (m.find() && m.groupCount() >= 2) {
