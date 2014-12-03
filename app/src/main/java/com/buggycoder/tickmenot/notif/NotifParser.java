@@ -7,9 +7,13 @@ import android.os.Bundle;
 import android.os.UserHandle;
 import android.service.notification.StatusBarNotification;
 
+import com.buggycoder.tickmenot.lib.Tuple;
+
+import java.util.List;
+
 import timber.log.Timber;
 
-public class NotifParser {
+public abstract class NotifParser<T> {
 
     protected interface NotificationProps {
         String TITLE = "android.title";
@@ -20,13 +24,12 @@ public class NotifParser {
 
     private final String mPackageName;
 
-    public NotifParser(String packageName) {
+    protected NotifParser(String packageName) {
         mPackageName = packageName;
     }
 
-    public void parse(StatusBarNotification sbn) {
-        dumpStatusBarNotification(sbn);
-    }
+    public abstract Tuple<String, List<T>> parse(StatusBarNotification sbn)
+            throws UnsupportedNotifException;
 
     public boolean isValid(StatusBarNotification sbn) {
         String packageName = sbn.getPackageName();

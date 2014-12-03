@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="notif_package">com.whatsapp</string>
+    <string name="group_notif_title">whatsapp</string>
+    <string name="sender_separator">: </string>
+
     <!--
  Single unread contact message
  ==

@@ -5,18 +5,22 @@ import android.os.IBinder;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 
-import com.buggycoder.tickmenot.R;
 import com.buggycoder.tickmenot.event.NotifAccessChangedEvent;
 import com.buggycoder.tickmenot.lib.BusProvider;
-import com.buggycoder.tickmenot.notif.NotifParser;
+import com.buggycoder.tickmenot.lib.Tuple;
+import com.buggycoder.tickmenot.model.WhatsappNotif;
+import com.buggycoder.tickmenot.notif.UnsupportedNotifException;
+import com.buggycoder.tickmenot.notif.WhatsappNotifParser;
 import com.squareup.otto.Bus;
+
+import java.util.List;
 
 import timber.log.Timber;
 
 public class NotifService extends NotificationListenerService {
 
     private Bus mBus;
-    private NotifParser mNotifParser;
+    private WhatsappNotifParser mNotifParser;
 
     @Override
     public void onCreate() {
@@ -25,7 +29,7 @@ public class NotifService extends NotificationListenerService {
         mBus = BusProvider.getBus();
         mBus.register(this);
 
-        mNotifParser = new NotifParser(getString(R.string.notif_package));
+        mNotifParser = new WhatsappNotifParser(getResources());
     }
 
     @Override
@@ -51,17 +55,16 @@ public class NotifService extends NotificationListenerService {
     public void onNotificationPosted(StatusBarNotification sbn) {
         Timber.d("onNotificationPosted: %s", sbn.toString());
 
-        if (mNotifParser.isValid(sbn)) {
-            mNotifParser.parse(sbn);
+        try {
+            Tuple<String, List<WhatsappNotif>> parse = mNotifParser.parse(sbn);
+            Timber.d("Parsed %s", parse._1);
+        } catch (UnsupportedNotifException e) {
+            Timber.e(e, "Parsing failed");
         }
     }
 
     @Override
     public void onNotificationRemoved(StatusBarNotification sbn) {
         Timber.d("onNotificationRemoved: %s", sbn.toString());
-
-        if (mNotifParser.isValid(sbn)) {
-            mNotifParser.parse(sbn);
-        }
     }
 }
