@@ -10,9 +10,14 @@ import android.widget.Toast;
 
 import com.buggycoder.tickmenot.R;
 import com.buggycoder.tickmenot.event.NotifAccessChangedEvent;
+import com.buggycoder.tickmenot.event.NotifPerstEvent;
+import com.buggycoder.tickmenot.model.WhatsappNotif;
 import com.squareup.otto.Subscribe;
 
+import java.util.Date;
+
 import butterknife.InjectView;
+import timber.log.Timber;
 
 
 public class MainActivity extends BaseActivity {
@@ -75,5 +80,17 @@ public class MainActivity extends BaseActivity {
     @Subscribe
     public void onNotifAccessChangedEvent(final NotifAccessChangedEvent event) {
         updateNotifAccessView(event.isAllowed);
+    }
+
+    @Subscribe
+    public void onNotifPerstEvent(final NotifPerstEvent notifPerst) {
+        if (notifPerst.notifs.size() > 0) {
+            WhatsappNotif notif = notifPerst.notifs.get(notifPerst.notifs.size() - 1);
+            String status = notifPerst.isSuccess ? "Success" : "Error";
+
+            String msg = String.format("%s: %s: %s | %s",
+                    status, notif.sender, notif.message, new Date(notif.postTime));
+            Timber.d(msg);
+        }
     }
 }

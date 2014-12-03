@@ -7,6 +7,7 @@ import android.service.notification.StatusBarNotification;
 import android.text.TextUtils;
 
 import com.buggycoder.tickmenot.event.NotifAccessChangedEvent;
+import com.buggycoder.tickmenot.event.NotifPerstEvent;
 import com.buggycoder.tickmenot.lib.BusProvider;
 import com.buggycoder.tickmenot.lib.Tuple;
 import com.buggycoder.tickmenot.model.WhatsappNotif;
@@ -65,26 +66,9 @@ public class NotifService extends NotificationListenerService {
             return;
         }
 
-        String summaryText;
-        List<WhatsappNotif> notifs;
+        //new Delete().from(WhatsappNotif.class).execute();
 
-        try {
-            Tuple<String, List<WhatsappNotif>> parsedSbn = mNotifParser.parse(sbn);
-            summaryText = parsedSbn._1;
-            notifs = parsedSbn._2;
-        } catch (UnsupportedNotifException e) {
-            // for anyone who's interested
-            BusProvider.getBus().post(e);
-            return;
-        }
-
-        if (notifs != null && notifs.size() > 0) {
-            for (WhatsappNotif notif : notifs) {
-                saveNotif(notif);
-            }
-        } else {
-            Timber.w("No new notifs");
-        }
+        updateNotifs();
     }
 
     @Override
@@ -93,6 +77,44 @@ public class NotifService extends NotificationListenerService {
     }
 
 
+    private void updateNotifs() {
+        StatusBarNotification[] activeNotifications = getActiveNotifications();
+        if (activeNotifications == null) {
+            return;
+        }
+
+        for (StatusBarNotification sbn : activeNotifications) {
+            if (TextUtils.isEmpty(sbn.getPackageName()) ||
+                    !sbn.getPackageName().startsWith(mNotifParser.getPackageName())) {
+                Timber.d("Ignored notification");
+                continue;
+            }
+
+            String summaryText;
+            List<WhatsappNotif> notifs;
+
+            try {
+                Tuple<String, List<WhatsappNotif>> parsedSbn = mNotifParser.parse(sbn);
+                summaryText = parsedSbn._1;
+                notifs = parsedSbn._2;
+            } catch (UnsupportedNotifException e) {
+                // for anyone who's interested
+                BusProvider.getBus().post(e);
+                return;
+            }
+
+            if (notifs != null && notifs.size() > 0) {
+                for (WhatsappNotif notif : notifs) {
+                    saveNotif(notif);
+                }
+
+                BusProvider.getBus().post(new NotifPerstEvent(notifs, true));
+            } else {
+                Timber.w("No new notifs");
+            }
+        }
+    }
+    
     private Long saveNotif(final WhatsappNotif notif) {
         if (!WhatsappNotif.isDup(notif)) {
             Timber.d("Saving notif");
