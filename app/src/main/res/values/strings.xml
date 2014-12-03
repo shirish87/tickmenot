@@ -2,9 +2,8 @@
 <resources>
 
     <string name="app_name">tickmenot</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
 
     <string name="request_notif_access">Please allow this app to read your notifications.</string>
+    <string name="lbl_request_notif_access">Please enable notification access</string>
 
 </resources>
