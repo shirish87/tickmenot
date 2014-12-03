@@ -3,6 +3,7 @@
     <string name="notif_package">com.whatsapp</string>
     <string name="group_notif_title">whatsapp</string>
     <string name="sender_separator">: </string>
+    <string name="self_notif_title">Unread Whatsapp messages</string>
 
     <!--
  Single unread contact message

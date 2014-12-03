@@ -141,7 +141,7 @@ public class NotifService extends NotificationListenerService {
         Notification.Builder notificationBuilder = new Notification.Builder(this)
                 .setSmallIcon(R.drawable.ic_launcher)
                 .setAutoCancel(true)
-                .setContentTitle("Unread Whatsapp messages")
+                .setContentTitle(getString(R.string.self_notif_title))
                 .setContentText(summaryText)
                 .setContentIntent(viewPendingIntent);
 
