@@ -14,7 +14,7 @@
         android:id="@+id/sender"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="12dip"
+        android:layout_marginBottom="8dip"
         android:text=""
         android:textAppearance="?android:attr/textAppearanceSmall"/>
 
@@ -22,7 +22,7 @@
         android:id="@+id/message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="12dip"
+        android:layout_marginBottom="8dip"
         android:text=""
         android:textAppearance="?android:attr/textAppearanceMedium"/>
 
@@ -30,7 +30,7 @@
         android:id="@+id/event"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="12dip"
+        android:layout_marginBottom="8dip"
         android:text=""
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:visibility="gone"/>
