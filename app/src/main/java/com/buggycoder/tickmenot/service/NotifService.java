@@ -5,8 +5,10 @@ import android.os.IBinder;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 
+import com.buggycoder.tickmenot.R;
 import com.buggycoder.tickmenot.event.NotifAccessChangedEvent;
 import com.buggycoder.tickmenot.lib.BusProvider;
+import com.buggycoder.tickmenot.notif.NotifParser;
 import com.squareup.otto.Bus;
 
 import timber.log.Timber;
@@ -14,6 +16,7 @@ import timber.log.Timber;
 public class NotifService extends NotificationListenerService {
 
     private Bus mBus;
+    private NotifParser mNotifParser;
 
     @Override
     public void onCreate() {
@@ -21,6 +24,8 @@ public class NotifService extends NotificationListenerService {
 
         mBus = BusProvider.getBus();
         mBus.register(this);
+
+        mNotifParser = new NotifParser(getString(R.string.notif_package));
     }
 
     @Override
@@ -45,10 +50,18 @@ public class NotifService extends NotificationListenerService {
     @Override
     public void onNotificationPosted(StatusBarNotification sbn) {
         Timber.d("onNotificationPosted: %s", sbn.toString());
+
+        if (mNotifParser.isValid(sbn)) {
+            mNotifParser.parse(sbn);
+        }
     }
 
     @Override
     public void onNotificationRemoved(StatusBarNotification sbn) {
         Timber.d("onNotificationRemoved: %s", sbn.toString());
+
+        if (mNotifParser.isValid(sbn)) {
+            mNotifParser.parse(sbn);
+        }
     }
 }

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notif_package">com.whatsapp</string>
+    <!--
+ Single unread contact message
+ ==
+ D/NotifParser﹕ Package: com.whatsapp
+ D/NotifParser﹕ Id: 1
+ D/NotifParser﹕ Tag: null
+ D/NotifParser﹕ Post time: 1417604239666
+ D/NotifParser﹕ Priority: 0
+ D/NotifParser﹕ Ticker Text: Message from Shirish
+ D/NotifParser﹕ No. of events: 0
+ D/NotifParser﹕ android.title => Shirish
+ D/NotifParser﹕ android.subText => null
+ D/NotifParser﹕ android.showChronometer => false
+ D/NotifParser﹕ android.support.isGroupSummary => true
+ D/NotifParser﹕ android.icon => 2130838978
+ D/NotifParser﹕ android.text => Single unread contact msg
+ D/NotifParser﹕ android.progress => 0
+ D/NotifParser﹕ android.progressMax => 0
+ D/NotifParser﹕ android.showWhen => true
+ D/NotifParser﹕ android.largeIcon => android.graphics.Bitmap@41c3c560
+ D/NotifParser﹕ android.infoText => null
+ D/NotifParser﹕ android.wearable.EXTENSIONS => Bundle[mParcelledData.
+ D/NotifParser﹕ android.progressIndeterminate => false
+ D/NotifParser﹕ android.scoreModified => false
+ D/NotifParser﹕ android.summaryText => 1 new message
+ D/NotifParser﹕ android.support.groupKey => group_key_messages
+
+ Single unread group message
+ ==
+ D/NotifParser﹕ Package: com.whatsapp
+ D/NotifParser﹕ Id: 1
+ D/NotifParser﹕ Tag: null
+ D/NotifParser﹕ Post time: 1417604155838
+ D/NotifParser﹕ Priority: 0
+ D/NotifParser﹕ Ticker Text: Message from Shirish @ tickmenot
+ D/NotifParser﹕ No. of events: 0
+ D/NotifParser﹕ android.title => tickmenot
+ D/NotifParser﹕ android.subText => null
+ D/NotifParser﹕ android.showChronometer => false
+ D/NotifParser﹕ android.support.isGroupSummary => true
+ D/NotifParser﹕ android.icon => 2130838978
+ D/NotifParser﹕ android.text => Shirish: Single unread grp message
+ D/NotifParser﹕ android.progress => 0
+ D/NotifParser﹕ android.progressMax => 0
+ D/NotifParser﹕ android.showWhen => true
+ D/dalvikvm﹕ GC_FOR_ALLOC freed 505K, 12% free 4544K/5108K, paused 18ms,
+ D/NotifParser﹕ android.infoText => null
+ D/NotifParser﹕ android.wearable.EXTENSIONS => Bundle[mParcelledData.
+ D/NotifParser﹕ android.progressIndeterminate => false
+ D/NotifParser﹕ android.scoreModified => false
+ D/NotifParser﹕ android.summaryText => 1 new message
+ D/NotifParser﹕ android.support.groupKey => group_key_messages
+
+ Multiple messages from one contact
+ ==
+ D/NotifParser﹕ Package: com.whatsapp
+ D/NotifParser﹕ Id: 1
+ D/NotifParser﹕ Tag: null
+ D/NotifParser﹕ Post time: 1417603918312
+ D/NotifParser﹕ Priority: 0
+ D/NotifParser﹕ Ticker Text: Message from Shirish
+ D/NotifParser﹕ No. of events: 0
+ D/NotifParser﹕ android.title => Shirish
+ D/NotifParser﹕ android.textLines => Ds
+ D/NotifParser﹕ android.textLines => R
+ D/NotifParser﹕ android.textLines => Dvvjj
+ D/NotifParser﹕ android.textLines => Gh
+ D/NotifParser﹕ android.textLines => S
+ D/NotifParser﹕ android.textLines => B
+ D/NotifParser﹕ android.textLines => A
+ D/NotifParser﹕ android.subText => null
+ D/NotifParser﹕ android.showChronometer => false
+ D/NotifParser﹕ android.support.isGroupSummary => true
+ D/NotifParser﹕ android.icon => 2130838978
+ D/NotifParser﹕ android.text => null
+ D/NotifParser﹕ android.progress => 0
+ D/NotifParser﹕ android.progressMax => 0
+ D/NotifParser﹕ android.support.localOnly => true
+ D/NotifParser﹕ android.showWhen => true
+ D/NotifParser﹕ android.largeIcon => android.graphics.Bitmap@41c73728
+ D/NotifParser﹕ android.infoText => null
+ D/NotifParser﹕ android.progressIndeterminate => false
+ D/NotifParser﹕ android.scoreModified => false
+ D/NotifParser﹕ android.summaryText => 10 new messages
+ D/NotifParser﹕ android.support.groupKey => group_key_messages
+
+ Multiple messages from multiple conversations
+ ==
+ D/NotifParser﹕ Package: com.whatsapp
+ D/NotifParser﹕ Id: 1
+ D/NotifParser﹕ Tag: null
+ D/NotifParser﹕ Post time: 1417604029156
+ D/NotifParser﹕ Priority: 0
+ D/NotifParser﹕ Ticker Text: Message from Shirish @ tickmenot
+ D/NotifParser﹕ No. of events: 0
+ D/NotifParser﹕ android.title => WhatsApp
+ D/NotifParser﹕ android.textLines => Shirish: Dvvjj
+ D/NotifParser﹕ android.textLines => Shirish: Gh
+ D/NotifParser﹕ android.textLines => Shirish: S
+ D/NotifParser﹕ android.textLines => Shirish: B
+ D/NotifParser﹕ android.textLines => Shirish: A
+ D/NotifParser﹕ android.textLines => Shirish added you
+ D/NotifParser﹕ android.textLines => Shirish @ tickmenot: What!
+ D/NotifParser﹕ android.subText => null
+ D/NotifParser﹕ android.showChronometer => false
+ D/NotifParser﹕ android.support.isGroupSummary => true
+ D/NotifParser﹕ android.icon => 2130838978
+ D/NotifParser﹕ android.text => null
+ D/NotifParser﹕ android.progress => 0
+ D/NotifParser﹕ android.progressMax => 0
+ D/NotifParser﹕ android.support.localOnly => true
+ D/NotifParser﹕ android.showWhen => true
+ D/NotifParser﹕ android.infoText => null
+ D/NotifParser﹕ android.progressIndeterminate => false
+ D/NotifParser﹕ android.scoreModified => false
+ D/NotifParser﹕ android.summaryText => 12 messages from 2 conversations.
+ D/NotifParser﹕ android.support.groupKey => group_key_messages
+ -->
+
+
+</resources>
