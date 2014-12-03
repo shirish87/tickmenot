@@ -5,6 +5,7 @@ import android.provider.BaseColumns;
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
+import com.activeandroid.query.Select;
 
 @Table(name = "notif", id = BaseColumns._ID)
 public class WhatsappNotif extends Model {
@@ -67,5 +68,14 @@ public class WhatsappNotif extends Model {
         result = 31 * result + message.hashCode();
         result = 31 * result + (int) (postTime ^ (postTime >>> 32));
         return result;
+    }
+
+    public static boolean isDup(WhatsappNotif notif) {
+        WhatsappNotif lastNotif = new Select()
+                .from(WhatsappNotif.class)
+                .where("sender = ? AND hashCode = ?", notif.sender, notif.hashCode)
+                .executeSingle();
+
+        return (lastNotif != null && lastNotif.equals(notif));
     }
 }

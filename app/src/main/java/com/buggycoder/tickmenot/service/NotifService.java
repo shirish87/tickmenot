@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
+import android.text.TextUtils;
 
 import com.buggycoder.tickmenot.event.NotifAccessChangedEvent;
 import com.buggycoder.tickmenot.lib.BusProvider;
@@ -58,20 +59,46 @@ public class NotifService extends NotificationListenerService {
     @Override
     public void onNotificationPosted(StatusBarNotification sbn) {
         Timber.d("onNotificationPosted: %s", sbn.toString());
-
-        try {
-            Tuple<String, List<WhatsappNotif>> parse = mNotifParser.parse(sbn);
-            Timber.d("Parsed %s", parse._1);
-        } catch (UnsupportedNotifException e) {
-            Timber.e(e, "Parsing failed");
+        if (TextUtils.isEmpty(sbn.getPackageName()) ||
+                !sbn.getPackageName().startsWith(mNotifParser.getPackageName())) {
+            Timber.d("Ignored notification");
+            return;
         }
 
-        WhatsappNotif test = new WhatsappNotif("event", "sender", "message", 1);
-        test.save();
+        String summaryText;
+        List<WhatsappNotif> notifs;
+
+        try {
+            Tuple<String, List<WhatsappNotif>> parsedSbn = mNotifParser.parse(sbn);
+            summaryText = parsedSbn._1;
+            notifs = parsedSbn._2;
+        } catch (UnsupportedNotifException e) {
+            // for anyone who's interested
+            BusProvider.getBus().post(e);
+            return;
+        }
+
+        if (notifs != null && notifs.size() > 0) {
+            for (WhatsappNotif notif : notifs) {
+                saveNotif(notif);
+            }
+        } else {
+            Timber.w("No new notifs");
+        }
     }
 
     @Override
     public void onNotificationRemoved(StatusBarNotification sbn) {
         Timber.d("onNotificationRemoved: %s", sbn.toString());
+    }
+
+
+    private Long saveNotif(final WhatsappNotif notif) {
+        if (!WhatsappNotif.isDup(notif)) {
+            Timber.d("Saving notif");
+            return notif.save();
+        }
+
+        return (long) -1;
     }
 }
