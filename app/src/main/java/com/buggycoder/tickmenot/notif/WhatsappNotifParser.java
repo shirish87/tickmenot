@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.service.notification.StatusBarNotification;
 import android.text.TextUtils;
 
+import com.activeandroid.query.Select;
 import com.buggycoder.tickmenot.R;
 import com.buggycoder.tickmenot.lib.Tuple;
 import com.buggycoder.tickmenot.model.WhatsappNotif;
@@ -70,6 +71,54 @@ public class WhatsappNotifParser extends NotifParser<WhatsappNotif> {
             if (!sender.isEmpty() && !message.isEmpty()) {
                 notifs.add(new WhatsappNotif(event, sender, message, postTime));
                 return new Tuple<>(summaryText, notifs);
+            }
+        }
+
+        // notif is a summary of multiple conversations
+        Map<String, List<String>> senderMessages = parseLines(notification.extras);
+
+        for (Map.Entry<String, List<String>> senderMsgs : senderMessages.entrySet()) {
+            WhatsappNotif lastMsgFromSender = new Select()
+                    .from(WhatsappNotif.class)
+                    .where("sender = ?", senderMsgs.getKey())
+                    .orderBy("_id DESC")
+                    .executeSingle();
+
+            if (lastMsgFromSender == null) {
+                for (String msg : senderMsgs.getValue()) {
+                    notifs.add(new WhatsappNotif(event, senderMsgs.getKey(), msg, postTime));
+                }
+            } else {
+                // merging local db list with list of android.textLines in incoming notif
+                // using strcmp here :(
+
+                List<String> msgs = senderMsgs.getValue();
+                int i;
+
+                for (i = msgs.size() - 1; i >= 0; i--) {
+                    if (msgs.get(i).equals(lastMsgFromSender.message)) {
+                        // found the marker
+                        break;
+                    }
+                }
+
+                for (int k = 0; k < i; k++) {
+                    // check intermediates
+                    // TODO: This could cause dups or inconsistency
+
+                    boolean exists = new Select().from(WhatsappNotif.class)
+                            .where("sender = ? AND message = ?", senderMsgs.getKey(), msgs.get(k))
+                            .exists();
+
+                    if (!exists) {
+                        notifs.add(new WhatsappNotif(event, senderMsgs.getKey(), msgs.get(k), postTime));
+                    }
+                }
+
+                for (int j = i + 1; j < msgs.size(); j++) {
+                    // merge the rest
+                    notifs.add(new WhatsappNotif(event, senderMsgs.getKey(), msgs.get(j), postTime));
+                }
             }
         }
 
