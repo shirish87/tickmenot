@@ -4,5 +4,6 @@
     <string name="app_name">TickMeNot</string>
     <string name="request_notif_access">Please allow \'TickMeNot\' to read your notifications.</string>
     <string name="lbl_request_notif_access">Please enable notification access</string>
+    <string name="notif_list_empty">No data</string>
 
 </resources>

@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.buggycoder.tickmenot.R;
 import com.buggycoder.tickmenot.model.WhatsappNotif;
@@ -17,6 +18,8 @@ import com.buggycoder.tickmenot.ui.adapter.NotifListAdapter;
 
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import timber.log.Timber;
 
 import static android.app.LoaderManager.LoaderCallbacks;
@@ -25,21 +28,33 @@ public class NotifListFragment extends Fragment implements LoaderCallbacks<List<
 
     public static final String TAG = "NotifListFragment";
 
-    protected RecyclerView mRecyclerView;
     protected LinearLayoutManager mLayoutManager;
     protected NotifListAdapter mAdapter;
     protected Loader<List<WhatsappNotif>> mListLoader;
+
+    @InjectView(R.id.notifList)
+    RecyclerView mRecyclerView;
+
+    @InjectView(R.id.emptyView)
+    TextView mEmptyView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_notif_list, container, false);
+        ButterKnife.inject(this, rootView);
 
-        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.notifList);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         mAdapter = new NotifListAdapter();
+        mAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onChanged() {
+                checkAdapterIsEmpty();
+            }
+        });
+
         mRecyclerView.setAdapter(mAdapter);
 
         Timber.d("onCreateView");
@@ -72,6 +87,14 @@ public class NotifListFragment extends Fragment implements LoaderCallbacks<List<
     public void onLoaderReset(Loader<List<WhatsappNotif>> loader) {
         Timber.d("onLoaderReset");
         mAdapter.setData(null);
+    }
+
+    private void checkAdapterIsEmpty () {
+        if (mAdapter.getItemCount() == 0) {
+            mEmptyView.setVisibility(View.VISIBLE);
+        } else {
+            mEmptyView.setVisibility(View.GONE);
+        }
     }
 
     public void scrollToBottom() {
