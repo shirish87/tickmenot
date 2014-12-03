@@ -84,7 +84,8 @@ public class WhatsappNotif extends Model {
     public static boolean isDup(WhatsappNotif notif) {
         WhatsappNotif lastNotif = new Select()
                 .from(WhatsappNotif.class)
-                .where("sender = ? AND hashCode = ?", notif.sender, notif.hashCode)
+                .where("sender = ?", notif.sender)
+                .orderBy("_id DESC")
                 .executeSingle();
 
         return (lastNotif != null && lastNotif.equals(notif));
